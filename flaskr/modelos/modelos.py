@@ -9,12 +9,10 @@ albunes_canciones = db.Table('album_cancion',\
                              db.Column('album_id',db.Integer,db.ForeignKey('album.id'),primary_key=True,),
                              db.Column('cancion_id',db.Integer,db.ForeignKey('cancion.id'),primary_key=True,))
 
-
 class Medio(enum.Enum):
     DISCO = 1
     CASETE = 2
     CD = 3
-
 
 class Usuario(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -24,7 +22,6 @@ class Usuario(db.Model):
 
     def __repr__(self):
         return "{}-{}".format(self.nombre_usuario, self.contrasena)
-
 
 class Album(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -40,7 +37,6 @@ class Album(db.Model):
         return "{}-{}-{}-{}".format(
             self.titulo, self.anio, self.descripcion, self.medio
         )
-
 
 class Cancion(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -80,3 +76,4 @@ class CancionSchema(SQLAlchemyAutoSchema):
         model = Cancion
         include_relationships = True
         load_instance = True
+
