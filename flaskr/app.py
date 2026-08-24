@@ -1,5 +1,6 @@
 from flaskr import create_app
 from .modelos import db, Cancion, Album, Usuario, Medio
+from .modelos import AlbumSchema,UsuarioSchema,CancionSchema
 
 app= create_app('default')
 app_context = app.app_context()
@@ -53,28 +54,43 @@ db.create_all()
 #     print("--- Canciones ---")
 #     print(Cancion.query.all())
 
+# with app.app_context():
+#     u =  Usuario(nombre_usuario="jzea", contrasena="123456")
+#     a1 = Album(
+#         titulo="Grandes Éxitos",
+#         anio=2024,
+#         descripcion="Álbum de prueba",
+#         medio=Medio.CD,
+#     )
+#     c1 = Cancion(titulo="Prueba cancion",minutos=2,segundos=25,interprete="Juan David Zea")
+#     u.albumes.append(a1)
+#     a1.canciones.append(c1)
+#     db.session.add(u)
+#     db.session.add(c1)
+#     db.session.commit()
+#     # print(Usuario.query.all())
+#     # print(Usuario.query.all()[0].albumes)
+#     # db.session.delete(u)
+#     # print(Usuario.query.all())
+#     # print(Album.query.all())
+#     print(Album.query.all())
+#     print(Cancion.query.all())
+#     print(Album.query.all()[0].canciones)
+#     db.session.delete(a1)
+#     print(Album.query.all())
+#     print(Cancion.query.all())
+
 with app.app_context():
-    u =  Usuario(nombre_usuario="jzea", contrasena="123456")
-    a1 = Album(
-        titulo="Grandes Éxitos",
-        anio=2024,
-        descripcion="Álbum de prueba",
-        medio=Medio.CD,
-    )
-    c1 = Cancion(titulo="Prueba cancion",minutos=2,segundos=25,interprete="Juan David Zea")
-    u.albumes.append(a1)
-    a1.canciones.append(c1)
-    db.session.add(u)
-    db.session.add(c1)
+    album_schema = AlbumSchema()
+    usuario_schema = UsuarioSchema()
+    cancion_schema = CancionSchema()
+    A = Album(titulo="Grandes Éxitos",anio=2024,descripcion="Álbum de prueba",medio=Medio.CD)
+    U = Usuario(nombre_usuario="jzea", contrasena="123456")
+    C = Cancion(titulo="Prueba cancion",minutos=2,segundos=25,interprete="Juan David Zea")
+    db.session.add(A)
+    db.session.add(U)
+    db.session.add(C)
     db.session.commit()
-    # print(Usuario.query.all())
-    # print(Usuario.query.all()[0].albumes)
-    # db.session.delete(u)
-    # print(Usuario.query.all())
-    # print(Album.query.all())
-    print(Album.query.all())
-    print(Cancion.query.all())
-    print(Album.query.all()[0].canciones)
-    db.session.delete(a1)
-    print(Album.query.all())
-    print(Cancion.query.all())
+    print([album_schema.dumps(album) for album in Album.query.all()])
+    print([usuario_schema.dumps(user) for user in Usuario.query.all()])
+    print([cancion_schema.dumps(cancion) for cancion in Cancion.query.all()])

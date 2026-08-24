@@ -1,5 +1,7 @@
 import enum
 from flask_sqlalchemy import SQLAlchemy
+from marshmallow_sqlalchemy import SQLAlchemyAutoSchema
+from marshmallow import fields
 
 db = SQLAlchemy()
 
@@ -52,4 +54,29 @@ class Cancion(db.Model):
         return "{}-{}-{}-{}".format(
             self.titulo, self.minutos, self.segundos, self.interprete
         )
+
+class EnumADiccionario(fields.Field):
+
+    def _serialize(self, value, attr, obj, **kwargs):
+        if value is None:
+            return None
+        return {'llave':value.name,'valor':value.value}
     
+class AlbumSchema(SQLAlchemyAutoSchema):
+    medio = EnumADiccionario(attribute='medio')
+    class Meta:
+        model = Album
+        include_relationships = True
+        load_instance = True
+
+class UsuarioSchema(SQLAlchemyAutoSchema):
+    class Meta:
+        model = Usuario
+        include_relationships = True
+        load_instance = True
+
+class CancionSchema(SQLAlchemyAutoSchema):
+    class Meta:
+        model = Cancion
+        include_relationships = True
+        load_instance = True
